@@ -1,31 +1,36 @@
-const mongoose = require('mongoose');
-const DataShema = mongoose.Schema({
-    AdminName:{
-        type:String
+const mongoose = require("mongoose");
+const DataShema = mongoose.Schema(
+  {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
     },
-    AdminNid:{
-        type:String
+    AdminName: {
+      type: String,
     },
-    AdminBio:{
-        type:String
+    AdminNid: {
+      type: String,
     },
-    AdminAddress:{
-        type:String
+    AdminBio: {
+      type: String,
     },
-    AdminPhone:{
-        type:String
+    AdminAddress: {
+      type: String,
     },
-    AdminEmail:{
-        type:String
+    AdminPhone: {
+      type: String,
     },
-    AdminImage:{
-        type:String
+    AdminEmail: {
+      type: String,
     },
-    AdminPassword:{
-        type:String
+    AdminImage: {
+      type: String,
     },
-},
-{timestamps: true, versionKey: false}
+    AdminPassword: {
+      type: String,
+    },
+  },
+  { timestamps: true, versionKey: false }
 );
-const SuperAdminModel = mongoose.model('superAdmin', DataShema);
-module.exports = SuperAdminModel
+const SuperAdminModel = mongoose.model("superAdmin", DataShema);
+module.exports = SuperAdminModel;
