@@ -46,8 +46,18 @@ const UpdateAdminService = async (req) => {
   }
 };
 
+const AdminProfileService = async (req) => {
+  try {
+    let searchId = await AdminModel.findById({ _id: req.params.id }).select('-AdminPassword');
+    return { status: "success", message: "admin profile success", data:searchId };
+  } catch (e) {
+    return { status: "fail", message: "Something Went Wrong" };
+  }
+};
+
 module.exports = {
   SaveAdminService,
   GetAdminService,
   UpdateAdminService,
+  AdminProfileService,
 };

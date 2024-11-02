@@ -2,7 +2,7 @@ const express = require('express');
 const { SuperAdmin, GetSuperAdmin, UpdateSuperAdmin } = require('../controller/SuperAdminController');
 const UserSignInService = require('../controller/authentication/Login');
 const UserForgotPass = require('../controller/authentication/ForgotPass');
-const { SaveAdmin, GetAdmin } = require('../controller/AdminController');
+const { SaveAdmin, GetAdmin, AdminProfile } = require('../controller/AdminController');
 
 const router = express.Router();
 
@@ -23,6 +23,7 @@ router.get("/get-super-admin",GetSuperAdmin)
 // super-admin api end point start
 router.post("/save-admin",SaveAdmin)
 router.get("/get-admin",GetAdmin)
+router.get("/admin-profile/:id",AdminProfile)
 // router.post("/update-super-admin",UpdateSuperAdmin)
 // super-admin api end point end
 
