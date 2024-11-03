@@ -14,5 +14,20 @@ const workSocket = (io, socket) => {
     socket.emit("deleteAdmin", deleteAdmin);
     socket.emit("deleteAdminUser", deleteAdminUser);
   });
+
+  socket.on("adminStatus", async (id, value, user) => {
+    let updateAdminStatus = await AdminModel.findByIdAndUpdate(
+      { _id: id },
+      { AdminStatus: value },
+      { new: true }
+    );
+    let updateUserStatus = await UserModel.findByIdAndUpdate(
+      { _id: user },
+      { userStatus: value },
+      { new: true }
+    );
+    socket.emit("updateAdminStatus", updateAdminStatus);
+    socket.emit("updateUserStatus", updateUserStatus);
+  });
 };
 module.exports = workSocket;

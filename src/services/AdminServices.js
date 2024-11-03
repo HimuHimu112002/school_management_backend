@@ -40,7 +40,23 @@ const UpdateAdminService = async (req) => {
       { $set: updateData },
       { upsert: true }
     );
-    return { status: "success", message: "admin Save Success" };
+    let data = await AdminModel.findOne({ _id: user_id });
+    await UserModel.findByIdAndUpdate(
+      { _id: data.user },
+      { userEmail: data.AdminEmail },
+      { upsert: true }
+    );
+    return { status: "success", message: "Update Save Success" };
+  } catch (e) {
+    return { status: "fail", message: "Something Went Wrong" };
+  }
+};
+
+const GetSingleAdminService = async (req) => {
+  try {
+    let user_id = req.headers.user_id;
+    let data = await AdminModel.findById({ _id: user_id });
+    return { status: "success", message: "Single admin data Success", data };
   } catch (e) {
     return { status: "fail", message: "Something Went Wrong" };
   }
@@ -48,8 +64,14 @@ const UpdateAdminService = async (req) => {
 
 const AdminProfileService = async (req) => {
   try {
-    let searchId = await AdminModel.findById({ _id: req.params.id }).select('-AdminPassword');
-    return { status: "success", message: "admin profile success", data:searchId };
+    let searchId = await AdminModel.findById({ _id: req.params.id }).select(
+      "-AdminPassword"
+    );
+    return {
+      status: "success",
+      message: "admin profile success",
+      data: searchId,
+    };
   } catch (e) {
     return { status: "fail", message: "Something Went Wrong" };
   }
@@ -60,4 +82,5 @@ module.exports = {
   GetAdminService,
   UpdateAdminService,
   AdminProfileService,
+  GetSingleAdminService,
 };

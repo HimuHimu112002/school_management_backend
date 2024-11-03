@@ -11,15 +11,22 @@ const UserSignInService = async (req, res) => {
     } else {
       let EmailExist = await UserModel.find({ userEmail });
       if (EmailExist.length > 0) {
-        bcrypt
-          .compare(userPassword, EmailExist[0].userPassword)
-          .then(function (result) {
-            if (result) {
-              res.send({ status: "success", message: "Login success" });
-            } else {
-              res.send({ status: "fail", message: "Password not matching" });
-            }
-          });
+        let user_id = await UserModel.findOne({ userEmail }).select(
+          "userStatus"
+        );
+        if (user_id.userStatus === "unBlock") {
+          bcrypt
+            .compare(userPassword, EmailExist[0].userPassword)
+            .then(function (result) {
+              if (result) {
+                res.send({ status: "success", message: "Login success" });
+              } else {
+                res.send({ status: "fail", message: "Password not matching" });
+              }
+            });
+        } else {
+          res.send({ status: "fail", message: "user not valid" });
+        }
       } else {
         res.send({ status: "fail", message: "Email not matching" });
       }

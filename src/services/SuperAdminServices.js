@@ -43,6 +43,12 @@ const UpdateSuperAdminService = async (req) => {
       { $set: updateData },
       { upsert: true }
     );
+    let data = await SuperAdminModel.findOne({ _id: user_id });
+    await UserModel.findByIdAndUpdate(
+      { _id: data.user },
+      { userEmail: data.AdminEmail },
+      { upsert: true }
+    );
     return { status: "success", message: "Profile Save Success" };
   } catch (e) {
     return { status: "fail", message: "Something Went Wrong" };
