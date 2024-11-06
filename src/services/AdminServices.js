@@ -24,8 +24,29 @@ const SaveAdminService = async (req) => {
 
 const GetAdminService = async (req) => {
   try {
-    let data = await AdminModel.find({});
-    return { status: "success", message: "Get admin data", data: data };
+    let pageNo = Number(req.params.pageNo);
+    let perPage = Number(req.params.perPage);
+    let skipRow = (pageNo - 1) * perPage;
+
+    data = await AdminModel.aggregate([
+      {
+        $facet: {
+          Rows: [
+            { $skip: skipRow },
+            { $limit: perPage },
+            {
+              $project: {
+                AdminPassword: 0,
+              },
+            },
+          ],
+        },
+      },
+    ]);
+    const totalCount = await AdminModel.countDocuments();
+    const totalPages = Math.ceil(totalCount / perPage);
+    //console.log(totalPages, totalCount, pageNo, perPage)
+    return { status: "success", message: "Get admin data", data: data,totalPages, totalCount, perPage };
   } catch (e) {
     return { status: "fail", message: "Something Went Wrong !" };
   }

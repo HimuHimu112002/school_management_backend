@@ -19,7 +19,7 @@ exports.SingleAdmin = async (req, res) => {
   return res.status(200).json(result);
 };
 exports.GetAdmin = async (req, res) => {
-  let result = await GetAdminService();
+  let result = await GetAdminService(req);
   return res.status(200).json(result);
 };
 exports.AdminProfile = async (req, res) => {

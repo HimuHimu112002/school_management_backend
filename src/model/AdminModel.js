@@ -27,6 +27,7 @@ const DataShema = mongoose.Schema({
     AdminEmail:{
         type:String,
         required: true,
+        unique: true,
     },
     AdminImage:{
         type:String
