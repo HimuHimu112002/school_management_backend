@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const SaveAdminService = async (req) => {
   try {
     let reqBody = req.body;
-    let findEmail = await UserModel.find({userEmail: reqBody.AdminEmail });
+    let findEmail = await UserModel.find({ userEmail: reqBody.AdminEmail });
 
     if (!reqBody.AdminEmail) {
       return { status: "fail", message: "Admin data not found" };
@@ -72,7 +72,10 @@ const GetAdminService = async (req) => {
 
 const UpdateAdminService = async (req) => {
   try {
-    let user_id = req.headers.user_id;
+    let user_id = req.headers.admin_id;
+    if (!user_id) {
+      return { status: "fail", message: "Update unvalid" };
+    }
     let updateData = req.body;
     await AdminModel.updateOne(
       { _id: user_id },
@@ -80,6 +83,7 @@ const UpdateAdminService = async (req) => {
       { upsert: true }
     );
     let data = await AdminModel.findOne({ _id: user_id });
+    console.log(data)
     await UserModel.findByIdAndUpdate(
       { _id: data.user },
       { userEmail: data.AdminEmail },

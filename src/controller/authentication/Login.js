@@ -1,5 +1,7 @@
 const bcrypt = require("bcrypt");
 const UserModel = require("../../model/UserModel");
+const { EncodeUserToken } = require("../../utility/TokenHelper");
+const AdminModel = require("../../model/AdminModel");
 
 const UserSignInService = async (req, res) => {
   try {
@@ -11,21 +13,40 @@ const UserSignInService = async (req, res) => {
     } else {
       let EmailExist = await UserModel.find({ userEmail });
       if (EmailExist.length > 0) {
-        let user_id = await UserModel.findOne({ userEmail }).select(
-          "userStatus"
-        );
-        if (user_id.userStatus === "unBlock") {
+        let user_status = await UserModel.findOne({ userEmail }).select({
+          userStatus: 1,
+          _id: 1,
+          userRole: 1,
+        });
+        let AdminEmail = userEmail
+        let admin_id = await AdminModel.findOne({ AdminEmail }).select({
+          _id: 1,
+        });
+        if (user_status.userStatus === "unBlock") {
+          // User Token Create
+          let token = EncodeUserToken(
+            userEmail,
+            user_status._id.toString(),
+            admin_id._id.toString(),
+            user_status.userRole,
+
+          );
+          res.cookie("token", token);
           bcrypt
             .compare(userPassword, EmailExist[0].userPassword)
             .then(function (result) {
               if (result) {
-                res.send({ status: "success", message: "Login success" });
+                res.send({
+                  status: "success",
+                  message: "Login success",
+                  token: token,
+                });
               } else {
                 res.send({ status: "fail", message: "Password not matching" });
               }
             });
         } else {
-          res.send({ status: "fail", message: "user not valid" });
+          res.send({ status: "fail", message: "user unvalid" });
         }
       } else {
         res.send({ status: "fail", message: "Email not matching" });
