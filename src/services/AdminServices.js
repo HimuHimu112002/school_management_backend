@@ -5,17 +5,29 @@ const bcrypt = require("bcrypt");
 const SaveAdminService = async (req) => {
   try {
     let reqBody = req.body;
-    const passHash = await bcrypt.hash(reqBody.AdminPassword, 10);
-    let user = new UserModel({
-      userEmail: reqBody.AdminEmail,
-      userPassword: passHash,
-      userRole: "Admin",
-      userStatus: "unBlock",
-    });
-    user.save();
-    reqBody.AdminPassword = passHash;
-    reqBody.user = user._id;
-    await AdminModel.create(reqBody);
+    let findEmail = await UserModel.find({userEmail: reqBody.AdminEmail });
+
+    if (!reqBody.AdminEmail) {
+      return { status: "fail", message: "Admin data not found" };
+    } else if (findEmail.length > 0) {
+      return { status: "fail", message: "This email already in used" };
+    } else {
+      const passHash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10);
+
+      // create user======================
+      let user = new UserModel({
+        userEmail: reqBody.AdminEmail,
+        userPassword: passHash,
+        userRole: "Admin",
+        userStatus: "unBlock",
+      });
+      user.save();
+
+      // create admin===============
+      reqBody.user = user._id;
+      await AdminModel.create(reqBody);
+    }
+
     return { status: "success", message: "admin Save Success" };
   } catch (e) {
     return { status: "fail", message: "Something Went Wrong !" };
@@ -45,8 +57,14 @@ const GetAdminService = async (req) => {
     ]);
     const totalCount = await AdminModel.countDocuments();
     const totalPages = Math.ceil(totalCount / perPage);
-    //console.log(totalPages, totalCount, pageNo, perPage)
-    return { status: "success", message: "Get admin data", data: data,totalPages, totalCount, perPage };
+    return {
+      status: "success",
+      message: "Get admin data",
+      data: data,
+      totalPages,
+      totalCount,
+      perPage,
+    };
   } catch (e) {
     return { status: "fail", message: "Something Went Wrong !" };
   }

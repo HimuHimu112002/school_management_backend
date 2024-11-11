@@ -32,10 +32,6 @@ const DataShema = mongoose.Schema({
     AdminImage:{
         type:String
     },
-    AdminPassword:{
-        type:String,
-        required: true,
-    },
     AdminRole:{
         type:String,
         default: "Admin",
