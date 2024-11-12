@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-
 const EncodeUserToken = (email, user_id, admin_id, userRole ) => {
   let KEY = "123-ABC-XYZ";
   let EXPIRE = { expiresIn: "24h" };
@@ -14,5 +13,4 @@ const DecodeUserToken = (token) => {
     return null;
   }
 };
-
 module.exports = { EncodeUserToken, DecodeUserToken };

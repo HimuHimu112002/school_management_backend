@@ -107,7 +107,6 @@ const GetSingleAdminService = async (req) => {
 const GetSingleAdmin = async (req) => {
   try {
     let admin_id = req.headers.admin_id;
-
     let data = await AdminModel.findById({ _id: admin_id });
     return { status: "success", message: "Single admin data Success", data };
   } catch (e) {
