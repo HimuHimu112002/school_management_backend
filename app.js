@@ -1,6 +1,7 @@
 const express = require("express");
 const router = require("./src/routes/api");
 const app = new express();
+const cookieParser = require('cookie-parser');
 
 // body perser implementation
 const bodyParser = require("body-parser");
@@ -17,6 +18,7 @@ require("dotenv").config();
 app.use(cors());
 app.use(helmet());
 app.use(mongoSanitizer());
+app.use(cookieParser());
 
 // rate limiter implementation
 ratelimit({ windowMs: 15 * 60 * 100, max: 3000 });

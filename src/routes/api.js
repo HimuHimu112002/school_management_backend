@@ -3,7 +3,7 @@ const router = express.Router();
 const { SuperAdmin, GetSuperAdmin, UpdateSuperAdmin } = require('../controller/SuperAdminController');
 const UserSignInService = require('../controller/authentication/Login');
 const UserForgotPass = require('../controller/authentication/ForgotPass');
-const { SaveAdmin, GetAdmin, AdminProfile, UpdateAdmin, SingleAdmin } = require('../controller/AdminController');
+const { SaveAdmin, GetAdmin, AdminProfile, UpdateAdmin, SingleAdmin, SinglePersonalAdmin } = require('../controller/AdminController');
 const TokenDecodAuth = require('../middleware/TokenDecodAuth')
 
 
@@ -24,8 +24,9 @@ router.get("/get-super-admin",GetSuperAdmin)
 // admin api end point start
 router.post("/save-admin",SaveAdmin)
 router.get("/get-admin/:pageNo/:perPage",GetAdmin)
-router.post("/update-admin", TokenDecodAuth , UpdateAdmin)
+router.post("/update-admin", UpdateAdmin)
 router.get("/getSingleAdmin",SingleAdmin)
+router.get("/getAdmin", TokenDecodAuth, SinglePersonalAdmin)
 router.get("/admin-profile/:id",AdminProfile)
 // admin api end point end
 

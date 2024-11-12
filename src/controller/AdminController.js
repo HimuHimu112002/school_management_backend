@@ -4,6 +4,7 @@ const {
   GetAdminService,
   AdminProfileService,
   GetSingleAdminService,
+  GetSingleAdmin,
 } = require("../services/AdminServices");
 
 exports.SaveAdmin = async (req, res) => {
@@ -16,6 +17,10 @@ exports.UpdateAdmin = async (req, res) => {
 };
 exports.SingleAdmin = async (req, res) => {
   let result = await GetSingleAdminService(req);
+  return res.status(200).json(result);
+};
+exports.SinglePersonalAdmin = async (req, res) => {
+  let result = await GetSingleAdmin(req);
   return res.status(200).json(result);
 };
 exports.GetAdmin = async (req, res) => {
