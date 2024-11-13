@@ -12,7 +12,7 @@ exports.SaveAdmin = async (req, res) => {
   return res.status(200).json(result);
 };
 exports.UpdateAdmin = async (req, res) => {
-  let result = await UpdateAdminService(req);
+  let result = await UpdateAdminService(req,res);
   return res.status(200).json(result);
 };
 exports.SingleAdmin = async (req, res) => {

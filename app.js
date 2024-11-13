@@ -1,6 +1,7 @@
 const express = require("express");
 const router = require("./src/routes/api");
 const app = new express();
+const path = require('path');
 const cookieParser = require('cookie-parser');
 
 // body perser implementation
@@ -16,6 +17,8 @@ require("dotenv").config();
 
 // sequrity middleare implementation
 app.use(cors());
+// app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
+
 app.use(helmet());
 app.use(mongoSanitizer());
 app.use(cookieParser());
