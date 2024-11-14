@@ -36,7 +36,7 @@ const GetSuperAdminService = async (req) => {
 
 const UpdateSuperAdminService = async (req) => {
   try {
-    let user_id = req.headers.user_id;
+    let user_id = req.headers.admin_id;
     let updateData = req.body
     await SuperAdminModel.updateOne(
       { _id: user_id },

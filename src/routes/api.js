@@ -36,7 +36,7 @@ router.post("/forgot", UserForgotPass);
 
 // super-admin api end point start
 router.post("/save-super-admin", SuperAdmin);
-router.post("/update-super-admin", UpdateSuperAdmin);
+router.post("/update-super-admin", TokenDecodAuth, UpdateSuperAdmin);
 router.get("/get-super-admin", GetSuperAdmin);
 // super-admin api end point end
 
@@ -45,7 +45,7 @@ router.get("/get-super-admin", GetSuperAdmin);
 router.post("/save-admin", SaveAdmin);
 router.get("/get-admin/:pageNo/:perPage", GetAdmin);
 //router.post("/update-admin", upload.single("AdminImage"), UpdateAdmin);
-router.post("/update-admin", upload.any(), UpdateAdmin);
+router.post("/update-admin", upload.any(),UpdateAdmin);
 // jodi akhane upload.single("AdminImage") ata thake tahole image sara update hobe kono value and jodi any use kori thaole image upload na korleo jekno data update kora jabe
 router.get("/getSingleAdmin", SingleAdmin);
 router.get("/getAdmin", TokenDecodAuth, SinglePersonalAdmin);
