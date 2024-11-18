@@ -14,10 +14,12 @@ const helmet = require("helmet");
 const mongoSanitizer = require("express-mongo-sanitize");
 const cors = require("cors");
 require("dotenv").config();
+const imgUrl = process.env.BASE_URL
 
 // sequrity middleare implementation
 app.use(cors());
-// app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
+app.use(`${imgUrl}/images`, express.static(`${__dirname}/public/images`));
+
 
 app.use(helmet());
 app.use(mongoSanitizer());

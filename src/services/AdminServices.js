@@ -1,7 +1,6 @@
 const AdminModel = require("../model/AdminModel");
 const UserModel = require("../model/UserModel");
 const bcrypt = require("bcrypt");
-const fs = require('fs');
 
 const SaveAdminService = async (req) => {
   try {
