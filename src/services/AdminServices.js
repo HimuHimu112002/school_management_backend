@@ -77,10 +77,6 @@ const UpdateAdminService = async (req) => {
       return { status: "fail", message: "Update unvalid" };
     }
     let updateData = req.body;
-    // for image
-    if (req.files && req.files.length > 0) {
-      updateData.AdminImage = req.files[0].filename;
-    }
     await AdminModel.updateOne(
       { _id: user_id },
       { $set: updateData },

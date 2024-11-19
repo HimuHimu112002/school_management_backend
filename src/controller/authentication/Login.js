@@ -23,13 +23,16 @@ const UserSignInService = async (req, res) => {
           _id: 1,
           userRole: 1,
         });
-        let AdminEmail = userEmail;
+        // find admin info
+        let adminInfo = await AdminModel.findOne({ AdminEmail:userEmail });
+
         //find adminEmail and findOut adminId _id for go to create token headers
+        // akhane main admin model er _id find korar jonno
         let admin_id =
-          (await AdminModel.findOne({ AdminEmail }).select({
+          (await AdminModel.findOne({ AdminEmail:userEmail }).select({
             _id: 1,
           })) ||
-          (await SuperAdminModel.findOne({ AdminEmail }).select({
+          (await SuperAdminModel.findOne({ AdminEmail:userEmail }).select({
             _id: 1,
           }));
         // check user status
@@ -51,13 +54,14 @@ const UserSignInService = async (req, res) => {
                   message: "Login success",
                   token: token,
                   roll: role.userRole,
+                  userInfo: adminInfo,
                 });
               } else {
                 res.send({ status: "fail", message: "Password not matching" });
               }
             });
         } else {
-          res.send({ status: "fail", message: "user unvalid" });
+          res.send({ status: "fail", message: "user not valid" });
         }
       } else {
         res.send({ status: "fail", message: "Email not matching" });
