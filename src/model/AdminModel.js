@@ -6,7 +6,8 @@ const DataShema = mongoose.Schema({
     },
     AdminName:{
         type:String,
-        required: true
+        required: true,
+        required: [true, "Name is required"],
     },
     AdminNid:{
         type:String,

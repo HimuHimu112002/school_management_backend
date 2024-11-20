@@ -1,3 +1,4 @@
+const phoneValidation = require("../helpers/phoneValidation");
 const AdminModel = require("../model/AdminModel");
 const UserModel = require("../model/UserModel");
 const bcrypt = require("bcrypt");
@@ -9,6 +10,8 @@ const SaveAdminService = async (req) => {
 
     if (!reqBody.AdminEmail) {
       return { status: "fail", message: "Admin data not found" };
+    } else if (!phoneValidation(reqBody.AdminPhone)) {
+      return { status: "fail", message: "Unvalid bangladeshi phone number" };
     } else if (findEmail.length > 0) {
       return { status: "fail", message: "This email already in used" };
     } else {
@@ -34,7 +37,7 @@ const SaveAdminService = async (req) => {
   }
 };
 
-const GetAdminService = async (req) => {
+const GetAllWithPaginationAdminService = async (req) => {
   try {
     let pageNo = Number(req.params.pageNo);
     let perPage = Number(req.params.perPage);
@@ -96,7 +99,10 @@ const UpdateAdminService = async (req) => {
 
 const GetSingleAdminService = async (req) => {
   try {
-    let user_id = req.headers.user_id;
+    let user_id = req.headers.id;
+    if (!user_id) {
+      return { status: "fail", message: "data unvalid" };
+    }
     let data = await AdminModel.findById({ _id: user_id });
     return { status: "success", message: "Single admin data Success", data };
   } catch (e) {
@@ -104,21 +110,27 @@ const GetSingleAdminService = async (req) => {
   }
 };
 
-const GetSingleAdmin = async (req) => {
+const adminProfile = async (req) => {
   try {
     let admin_id = req.headers.admin_id;
+    if (!admin_id) {
+      return { status: "fail", message: "data unvalid" };
+    }
     let data = await AdminModel.findById({ _id: admin_id });
-    return { status: "success", message: "Single admin data Success", data };
+    return { status: "success", message: "Single admin data Success tt", data };
   } catch (e) {
     return { status: "fail", message: "Something Went Wrong" };
   }
 };
 
-const AdminProfileService = async (req) => {
+const SuperAdminGetAdminProfileService = async (req) => {
   try {
     let searchId = await AdminModel.findById({ _id: req.params.id }).select(
       "-AdminPassword"
     );
+    if (!searchId) {
+      return { status: "fail", message: "data unvalid" };
+    }
     return {
       status: "success",
       message: "admin profile success",
@@ -131,9 +143,9 @@ const AdminProfileService = async (req) => {
 
 module.exports = {
   SaveAdminService,
-  GetAdminService,
+  GetAllWithPaginationAdminService,
   UpdateAdminService,
-  AdminProfileService,
+  SuperAdminGetAdminProfileService,
   GetSingleAdminService,
-  GetSingleAdmin
+  adminProfile,
 };

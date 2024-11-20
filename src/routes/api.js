@@ -11,12 +11,13 @@ const UserForgotPass = require("../controller/authentication/ForgotPass");
 const {
   SaveAdmin,
   GetAdmin,
-  AdminProfile,
   UpdateAdmin,
   SingleAdmin,
   SinglePersonalAdmin,
+  AdminProfile,
 } = require("../controller/AdminController");
 const TokenDecodAuth = require("../middleware/TokenDecodAuth");
+const { adminProfile } = require("../services/AdminServices");
 
 // Authentication api end point start
 router.post("/sign-in", UserSignInService);

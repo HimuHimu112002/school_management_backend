@@ -6,16 +6,23 @@ const {
 } = require("../../utility/TokenHelper");
 const AdminModel = require("../../model/AdminModel");
 const SuperAdminModel = require("../../model/SuperAdminModel");
+const emailVelidation = require("../../helpers/emailValidation");
 const UserSignInService = async (req, res) => {
   try {
     let { userEmail, userPassword } = req.body;
     if (!userEmail) {
       res.send({ status: "fail", message: "Please Enter Your Email" });
-    } else if (!userPassword) {
+    }else if (!emailVelidation(userEmail)) {
+      res.send({ status: "fail", message: "Please Enter The valid email" });
+    }  
+    else if (!userPassword) {
       res.send({ status: "fail", message: "Please Enter The Password" });
     } else {
       // find user email
       let EmailExist = await UserModel.find({ userEmail });
+      if (!EmailExist) {
+        res.send({ status: "fail", message: "data unvalid" });
+      }
       if (EmailExist.length > 0) {
         //find user status _id and role for go to create token headers
         let user_status = await UserModel.findOne({ userEmail }).select({
@@ -24,15 +31,15 @@ const UserSignInService = async (req, res) => {
           userRole: 1,
         });
         // find admin info
-        let adminInfo = await AdminModel.findOne({ AdminEmail:userEmail });
+        let adminInfo = await AdminModel.findOne({ AdminEmail: userEmail });
 
         //find adminEmail and findOut adminId _id for go to create token headers
         // akhane main admin model er _id find korar jonno
         let admin_id =
-          (await AdminModel.findOne({ AdminEmail:userEmail }).select({
+          (await AdminModel.findOne({ AdminEmail: userEmail }).select({
             _id: 1,
           })) ||
-          (await SuperAdminModel.findOne({ AdminEmail:userEmail }).select({
+          (await SuperAdminModel.findOne({ AdminEmail: userEmail }).select({
             _id: 1,
           }));
         // check user status

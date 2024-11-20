@@ -28,6 +28,9 @@ const SaveSuperAdminService = async (req) => {
 const GetSuperAdminService = async (req) => {
   try {
     let data = await SuperAdminModel.find({});
+    if (!data) {
+      return { status: "fail", message: "data unvalid" };
+    }
     return { status: "success", message: "Get super admin", data: data };
   } catch (e) {
     return { status: "fail", message: "Something Went Wrong !" };
@@ -37,6 +40,9 @@ const GetSuperAdminService = async (req) => {
 const UpdateSuperAdminService = async (req) => {
   try {
     let user_id = req.headers.admin_id;
+    if (!user_id) {
+      return { status: "fail", message: "data unvalid" };
+    }
     let updateData = req.body
     await SuperAdminModel.updateOne(
       { _id: user_id },
@@ -44,6 +50,9 @@ const UpdateSuperAdminService = async (req) => {
       { upsert: true }
     );
     let data = await SuperAdminModel.findOne({ _id: user_id });
+    if (!data) {
+      return { status: "fail", message: "data unvalid" };
+    }
     await UserModel.findByIdAndUpdate(
       { _id: data.user },
       { userEmail: data.AdminEmail },
