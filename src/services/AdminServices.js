@@ -82,7 +82,7 @@ const UpdateAdminService = async (req) => {
     let updateData = req.body;
     await AdminModel.updateOne(
       { _id: user_id },
-      { $set: updateData },
+      { $set: updateData},
       { upsert: true }
     );
     let data = await AdminModel.findOne({ _id: user_id });
