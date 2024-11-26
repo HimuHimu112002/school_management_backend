@@ -1,4 +1,5 @@
 const express = require("express");
+const passport = require('passport');
 const router = express.Router();
 
 const {
@@ -39,5 +40,21 @@ router.get("/getSingleAdmin", SingleAdmin);
 router.get("/getAdmin", TokenDecodAuth, SinglePersonalAdmin);
 router.get("/admin-profile/:id", AdminProfile);
 // admin api end point end
+
+// Google OAuth Login
+router.get('/google', (req, res, next) => {
+  next();
+}, passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+// Google OAuth Callback
+router.get('/google/callback', (req, res, next) => {
+  next();
+}, 
+// Google OAuth Successfull or fail
+passport.authenticate('google', {
+  failureRedirect: 'http://localhost:5173/sign-in',
+}), (req, res) => {
+  res.redirect('http://localhost:5173');
+});
 
 module.exports = router;

@@ -1,8 +1,27 @@
 const express = require("express");
 const router = require("./src/routes/api");
 const app = new express();
-const path = require('path');
+//const path = require('path');
+
+// user for google auth
+const session = require('express-session');
+const passport = require('passport');
+require('dotenv').config();
+require('./src/passport/passport');
+
 const cookieParser = require('cookie-parser');
+
+// Middleware for google
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || 'default-secret-key',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false },
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
 // body perser implementation
 const bodyParser = require("body-parser");
@@ -13,12 +32,9 @@ const ratelimit = require("express-rate-limit");
 const helmet = require("helmet");
 const mongoSanitizer = require("express-mongo-sanitize");
 const cors = require("cors");
-require("dotenv").config();
-const imgUrl = process.env.BASE_URL
 
 // sequrity middleare implementation
 app.use(cors());
-
 app.use(helmet());
 app.use(mongoSanitizer());
 app.use(cookieParser());
