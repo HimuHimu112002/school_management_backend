@@ -8,7 +8,6 @@ const session = require('express-session');
 const passport = require('passport');
 require('dotenv').config();
 require('./src/passport/passport');
-
 const cookieParser = require('cookie-parser');
 
 // Middleware for google

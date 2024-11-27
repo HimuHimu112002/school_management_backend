@@ -1,6 +1,6 @@
 const passport = require("passport");
 const AuthModel = require("../model/googleAuth");
-const { EncodeUserToken, DecodeUserToken } = require("../utility/TokenHelper");
+const AdminModel = require("../model/AdminModel");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
 passport.use(
@@ -20,8 +20,14 @@ passport.use(
             email: profile.emails[0].value,
             image: profile.photos[0].value,
           });
-          let token = EncodeUserToken(user.email, user._id, user.googleId);
-          DecodeUserToken(token);
+          // create admin ======================
+          let user2 = await new AdminModel({
+            user: user._id,
+            AdminName: user.displayName,
+            AdminEmail: user.email,
+            AdminImage: user.image,
+          });
+          await user2.save();
         }
         return done(null, user);
       } catch (err) {

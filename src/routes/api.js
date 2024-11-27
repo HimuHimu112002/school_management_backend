@@ -1,5 +1,5 @@
 const express = require("express");
-const passport = require('passport');
+const passport = require("passport");
 const router = express.Router();
 
 const {
@@ -19,6 +19,8 @@ const {
 } = require("../controller/AdminController");
 const TokenDecodAuth = require("../middleware/TokenDecodAuth");
 const { adminProfile } = require("../services/AdminServices");
+const { EncodeUserToken } = require("../utility/TokenHelper");
+const AdminModel = require("../model/AdminModel");
 
 // Authentication api end point start
 router.post("/sign-in", UserSignInService);
@@ -31,30 +33,49 @@ router.post("/update-super-admin", TokenDecodAuth, UpdateSuperAdmin);
 router.get("/get-super-admin", GetSuperAdmin);
 // super-admin api end point end
 
-
 // admin api end point start
 router.post("/save-admin", SaveAdmin);
 router.get("/get-admin/:pageNo/:perPage", GetAdmin);
-router.post("/update-admin",UpdateAdmin);
+router.post("/update-admin", UpdateAdmin);
 router.get("/getSingleAdmin", SingleAdmin);
 router.get("/getAdmin", TokenDecodAuth, SinglePersonalAdmin);
 router.get("/admin-profile/:id", AdminProfile);
 // admin api end point end
 
 // Google OAuth Login
-router.get('/google', (req, res, next) => {
-  next();
-}, passport.authenticate('google', { scope: ['profile', 'email'] }));
+// router.get('/google', (req, res, next) => {
+//   next();
+// }, passport.authenticate('google', { scope: ['profile', 'email'] }));
 
-// Google OAuth Callback
-router.get('/google/callback', (req, res, next) => {
-  next();
-}, 
-// Google OAuth Successfull or fail
-passport.authenticate('google', {
-  failureRedirect: 'http://localhost:5173/sign-in',
-}), (req, res) => {
-  res.redirect('http://localhost:5173');
-});
+// router.get('/google/callback', (req, res, next) => {
+//   next();
+// },passport.authenticate('google', {
+//   failureRedirect: 'http://localhost:5173/sign-in',
+// }), (req, res) => {
+//   res.redirect('http://localhost:5173');
+// });
+// Google OAuth Login
 
+router.get(
+  "/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+router.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    failureRedirect: "http://localhost:5173/sign-in",
+  }),
+  async (req, res) => {
+    const user = req.user;
+    let admin_id = await AdminModel.findOne({
+      AdminEmail: user.email,
+    }).select({
+      _id: 1,
+    });
+    // user for create token and get admin _id
+    const token = EncodeUserToken(user.email, user._id, admin_id._id);
+    const roll = "Admin";
+    res.redirect(`http://localhost:5173?token=${token}&roll=${roll}`);
+  }
+);
 module.exports = router;

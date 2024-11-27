@@ -5,6 +5,5 @@ const DataShema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   image: { type: String },
 });
-
 const AuthModel = mongoose.model('auth', DataShema);
 module.exports = AuthModel

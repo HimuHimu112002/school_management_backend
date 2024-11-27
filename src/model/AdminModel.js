@@ -11,19 +11,15 @@ const DataShema = mongoose.Schema({
     },
     AdminNid:{
         type:String,
-        required: true,
     },
     AdminBio:{
         type:String,
-        required: true,
     },
     AdminAddress:{
         type:String,
-        required: true,
     },
     AdminPhone:{
         type:String,
-        required: true,
     },
     AdminEmail:{
         type:String,
