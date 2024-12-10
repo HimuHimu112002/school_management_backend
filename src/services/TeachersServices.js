@@ -36,7 +36,7 @@ const SaveTeachersService = async (req) => {
       }
       let incrementId = (Number(currentId) + 1).toString().padStart(4, "0");
       incrementId = `T-${incrementId}`;
-      reqBody.data.id = incrementId
+      reqBody.data.id = incrementId;
       await TeacherModel.create(reqBody.data);
       return { status: "success", message: "teacher save success" };
     }
@@ -72,7 +72,21 @@ const GetAllTeacherWithPagination = async (req) => {
     return { status: "fail", message: "Something Went Wrong !" };
   }
 };
+
+const GetSearchByTeacherID = async (req, res) => {
+  try {
+    const id = req.params.id;
+    let data = await TeacherModel.findOne({ id });
+    if (!data) {
+      return { status: "fail", message: `Not found this id: - ${id}` };
+    }
+    return { status: "success", message: "Teacher's find success", data: data };
+  } catch (e) {
+    return { status: "fail", message: "Something Went Wrong !" };
+  }
+};
 module.exports = {
   SaveTeachersService,
   GetAllTeacherWithPagination,
+  GetSearchByTeacherID,
 };

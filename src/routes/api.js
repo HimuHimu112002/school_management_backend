@@ -21,7 +21,7 @@ const TokenDecodAuth = require("../middleware/TokenDecodAuth");
 const { adminProfile } = require("../services/AdminServices");
 const { EncodeUserToken } = require("../utility/TokenHelper");
 const AdminModel = require("../model/AdminModel");
-const { SaveTeachers, GetTeacher } = require("../controller/TeachersController");
+const { SaveTeachers, GetTeacher, SearchByTeacherID } = require("../controller/TeachersController");
 
 
 router.post("/sign-in", UserSignInService);
@@ -67,6 +67,7 @@ router.get(
 
 router.post("/save-teachers", SaveTeachers);
 router.get("/get-teacher/:pageNo/:perPage", GetTeacher);
+router.get("/search-teacher-id/:id", SearchByTeacherID);
 // teachers api end point end
 
 module.exports = router;
