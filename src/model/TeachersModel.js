@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 const DataShema = mongoose.Schema(
   {
+    id: {
+      type: String,
+      require: true,
+    },
     TeacherName: {
       type: String,
       required: true,
