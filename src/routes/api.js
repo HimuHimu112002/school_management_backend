@@ -22,7 +22,7 @@ const { adminProfile } = require("../services/AdminServices");
 const { EncodeUserToken } = require("../utility/TokenHelper");
 const AdminModel = require("../model/AdminModel");
 const { SaveTeachers, GetTeacher, SearchByTeacherID } = require("../controller/TeachersController");
-const { SaveStudent } = require("../controller/StudentController");
+const { SaveStudent, GetStudent, GetSearchStudent } = require("../controller/StudentController");
 
 
 router.post("/sign-in", UserSignInService);
@@ -73,8 +73,8 @@ router.get("/search-teacher-id/:id", SearchByTeacherID);
 
 
 router.post("/save-student", SaveStudent);
-// router.get("/get-teacher/:pageNo/:perPage", GetTeacher);
-// router.get("/search-teacher-id/:id", SearchByTeacherID);
+router.get("/get-student/:pageNo/:perPage", GetStudent);
+router.get("/studentSearch/:id/:StudentClass/:StudentClassVersion", GetSearchStudent);
 // teachers api end point end
 
 module.exports = router;

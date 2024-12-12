@@ -24,6 +24,7 @@ const DataShema = mongoose.Schema(
     },
     StudentClassVersion: {
       type: String,
+      enum:["Bangla","English"]
     },
     StudentClass: {
       type: String,
