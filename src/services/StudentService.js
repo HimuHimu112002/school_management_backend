@@ -1,5 +1,6 @@
 const phoneValidation = require("../helpers/phoneValidation");
 const StudentModel = require("../model/StudentModel");
+
 const SaveStudentService = async (req) => {
   try {
     let reqBody = req.body;
@@ -97,8 +98,37 @@ const GetSearchByStudent = async (req, res) => {
     return { status: "fail", message: "Something Went Wrong !" };
   }
 };
+
+const GetSearchByStudentClassAndVersion = async (req, res) => {
+  try {
+    const {StudentClass, StudentClassVersion } = req.params;
+    const matchConditions = {};
+    if (StudentClass) {
+      const classes = StudentClass.split(",");
+      matchConditions.StudentClass = { $in: classes };
+    }
+    if (StudentClassVersion) {
+      const versions = StudentClassVersion.split(",");
+      matchConditions.StudentClassVersion = { $in: versions };
+    }
+    // Aggregation pipeline
+    const pipeline = [
+      { $match: matchConditions }, // Match stage
+    ];
+    // Execute aggregation
+    const data = await StudentModel.aggregate(pipeline);
+    if (!data) {
+      return { status: "fail", message: `Not found this` };
+    }
+    return { status: "success", message: "Student find success", data: data };
+  } catch (e) {
+    return { status: "fail", message: "Something Went Wrong !" };
+  }
+};
+
 module.exports = {
   SaveStudentService,
   GetAllStudentWithPagination,
   GetSearchByStudent,
+  GetSearchByStudentClassAndVersion
 };

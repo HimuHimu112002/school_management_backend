@@ -1,4 +1,4 @@
-const { SaveStudentService, GetAllStudentWithPagination, GetSearchByStudent } = require("../services/StudentService");
+const { SaveStudentService, GetAllStudentWithPagination, GetSearchByStudent, GetSearchByStudentClassAndVersion } = require("../services/StudentService");
 
 exports.SaveStudent = async (req, res) => {
   let result = await SaveStudentService(req);
@@ -10,5 +10,9 @@ exports.GetStudent = async (req, res) => {
 };
 exports.GetSearchStudent = async (req, res) => {
   let result = await GetSearchByStudent(req);
+  return res.status(200).json(result);
+};
+exports.GetSearchStudentClassAndVersion = async (req, res) => {
+  let result = await GetSearchByStudentClassAndVersion(req);
   return res.status(200).json(result);
 };
