@@ -108,6 +108,19 @@ const GetSearchByStudent = async (req, res) => {
   }
 };
 
+const DeleteManyStudentService = async (req, res) => {
+  try {
+    const { ids } = req.body;
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return { status: "fail", message: "Something Went Wrong !" };
+    }
+    const data = await StudentModel.deleteMany({ _id: { $in: ids } });
+    return { status: "success", message: "Student delete success", data: data };
+  } catch (e) {
+    return { status: "fail", message: "Something Went Wrong !" };
+  }
+};
+
 const GetSearchByStudentClassAndVersion = async (req, res) => {
   try {
     const { StudentClass, StudentClassVersion } = req.params;
@@ -140,4 +153,5 @@ module.exports = {
   GetAllStudentWithPagination,
   GetSearchByStudent,
   GetSearchByStudentClassAndVersion,
+  DeleteManyStudentService,
 };
