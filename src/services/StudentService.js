@@ -16,7 +16,9 @@ const SaveStudentService = async (req) => {
     } else {
       const findLastStudent = async (field) => {
         const lastStudent = await StudentModel.findOne(
-          { StudentRole: "Student" },
+          {
+            StudentClassVersion: reqBody.StudentClassVersion,
+          },
           { [field]: 1, _id: 0 }
         )
           .sort({ createdAt: -1 })
@@ -26,7 +28,14 @@ const SaveStudentService = async (req) => {
       let currentId = (0).toString();
       const lastStudentId = await findLastStudent("id");
       const lastStudentByClass = await findLastStudent("StudentClass");
-      if (lastStudentId && lastStudentByClass === reqBody.StudentClass) {
+      const lastStudentByClassVersion = await findLastStudent(
+        "StudentClassVersion"
+      );
+      if (
+        lastStudentId &&
+        lastStudentByClass === reqBody.StudentClass &&
+        lastStudentByClassVersion === reqBody.StudentClassVersion
+      ) {
         currentId = lastStudentId.substring(2);
       }
       const incrementId = `S-${(Number(currentId) + 1)
@@ -101,7 +110,7 @@ const GetSearchByStudent = async (req, res) => {
 
 const GetSearchByStudentClassAndVersion = async (req, res) => {
   try {
-    const {StudentClass, StudentClassVersion } = req.params;
+    const { StudentClass, StudentClassVersion } = req.params;
     const matchConditions = {};
     if (StudentClass) {
       const classes = StudentClass.split(",");
@@ -130,5 +139,5 @@ module.exports = {
   SaveStudentService,
   GetAllStudentWithPagination,
   GetSearchByStudent,
-  GetSearchByStudentClassAndVersion
+  GetSearchByStudentClassAndVersion,
 };
