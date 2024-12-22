@@ -22,7 +22,7 @@ const { adminProfile } = require("../services/AdminServices");
 const { EncodeUserToken } = require("../utility/TokenHelper");
 const AdminModel = require("../model/AdminModel");
 const { SaveTeachers, GetTeacher, SearchByTeacherID } = require("../controller/TeachersController");
-const { SaveStudent, GetStudent, GetSearchStudent, GetSearchStudentClassAndVersion, DeleteManyStudent } = require("../controller/StudentController");
+const { SaveStudent, GetStudent, GetSearchStudent, GetSearchStudentClassAndVersion, DeleteManyStudent, UpdateManyStudent } = require("../controller/StudentController");
 
 
 router.post("/sign-in", UserSignInService);
@@ -74,6 +74,7 @@ router.get("/search-teacher-id/:id", SearchByTeacherID);
 
 router.post("/save-student", SaveStudent);
 router.delete("/deleteManyStudent",DeleteManyStudent);
+router.post("/updateManyStudent",UpdateManyStudent);
 router.get("/get-student/:pageNo/:perPage", GetStudent);
 router.get("/studentSearch/:id/:StudentClass/:StudentClassVersion", GetSearchStudent);
 router.get("/studentClassVersionSearch/:StudentClass/:StudentClassVersion", GetSearchStudentClassAndVersion);

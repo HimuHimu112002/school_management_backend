@@ -121,6 +121,22 @@ const DeleteManyStudentService = async (req, res) => {
   }
 };
 
+const UpdateManyStudentService = async (req, res) => {
+  try {
+    const reqBody = req.body;
+    const bulkOperations = reqBody.data.map((user) => ({
+      updateOne: {
+        filter: { _id: user.id },
+        update: { $set: { id: `S-${user.data}` } },
+      },
+    }));
+    const data = await StudentModel.bulkWrite(bulkOperations);
+    return { status: "success", message: "Student update success", data: data };
+  } catch (e) {
+    return { status: "fail", message: "Something Went Wrong !" };
+  }
+};
+
 const GetSearchByStudentClassAndVersion = async (req, res) => {
   try {
     const { StudentClass, StudentClassVersion } = req.params;
@@ -154,4 +170,5 @@ module.exports = {
   GetSearchByStudent,
   GetSearchByStudentClassAndVersion,
   DeleteManyStudentService,
+  UpdateManyStudentService,
 };
