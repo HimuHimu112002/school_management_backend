@@ -1,7 +1,11 @@
-const { SaveStudentService, GetAllStudentWithPagination, GetSearchByStudent, GetSearchByStudentClassAndVersion, DeleteManyStudentService, UpdateManyStudentService } = require("../services/StudentService");
+const { SaveStudentService, GetAllStudentWithPagination, GetSearchByStudent, GetSearchByStudentClassAndVersion, DeleteManyStudentService, UpdateManyStudentService, StudentInvoiceService } = require("../services/StudentService");
 
 exports.SaveStudent = async (req, res) => {
   let result = await SaveStudentService(req);
+  return res.status(200).json(result);
+};
+exports.GetStudentInvoice = async (req, res) => {
+  let result = await StudentInvoiceService(req);
   return res.status(200).json(result);
 };
 exports.DeleteManyStudent = async (req, res) => {

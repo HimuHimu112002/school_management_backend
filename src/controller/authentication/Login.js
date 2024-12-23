@@ -7,6 +7,7 @@ const {
 const AdminModel = require("../../model/AdminModel");
 const SuperAdminModel = require("../../model/SuperAdminModel");
 const emailVelidation = require("../../helpers/emailValidation");
+
 const UserSignInService = async (req, res) => {
   try {
     let { userEmail, userPassword } = req.body;

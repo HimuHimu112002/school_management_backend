@@ -22,7 +22,8 @@ const { adminProfile } = require("../services/AdminServices");
 const { EncodeUserToken } = require("../utility/TokenHelper");
 const AdminModel = require("../model/AdminModel");
 const { SaveTeachers, GetTeacher, SearchByTeacherID } = require("../controller/TeachersController");
-const { SaveStudent, GetStudent, GetSearchStudent, GetSearchStudentClassAndVersion, DeleteManyStudent, UpdateManyStudent } = require("../controller/StudentController");
+const { SaveStudent, GetStudent, GetSearchStudent, GetSearchStudentClassAndVersion, DeleteManyStudent, UpdateManyStudent, GetStudentInvoice } = require("../controller/StudentController");
+const {PaymentService, PaymentSuccess, PaymentFail} = require("../controller/payment");
 
 
 router.post("/sign-in", UserSignInService);
@@ -73,11 +74,19 @@ router.get("/search-teacher-id/:id", SearchByTeacherID);
 
 
 router.post("/save-student", SaveStudent);
+//router.post("/save-student",PaymentService);
+router.post("/payment/success/:tranId", PaymentSuccess);
+router.post("/payment/fail/:tranId", PaymentFail);
 router.delete("/deleteManyStudent",DeleteManyStudent);
 router.post("/updateManyStudent",UpdateManyStudent);
 router.get("/get-student/:pageNo/:perPage", GetStudent);
+router.get("/get-invoice/:pageNo/:perPage", GetStudentInvoice);
 router.get("/studentSearch/:id/:StudentClass/:StudentClassVersion", GetSearchStudent);
 router.get("/studentClassVersionSearch/:StudentClass/:StudentClassVersion", GetSearchStudentClassAndVersion);
-// teachers api end point end
+// student api end point end
 
+
+
+router.post("/payment/init", PaymentService);
+// payment getway
 module.exports = router;

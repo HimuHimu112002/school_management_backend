@@ -1,7 +1,8 @@
 const phoneValidation = require("../helpers/phoneValidation");
+const InvoiceModel = require("../model/InvoiceModel");
 const StudentModel = require("../model/StudentModel");
 
-const SaveStudentService = async (req) => {
+const SaveStudentService = async (req, res) => {
   try {
     let reqBody = req.body;
     if (
@@ -46,7 +47,7 @@ const SaveStudentService = async (req) => {
       return { status: "success", message: "Student save success" };
     }
   } catch (e) {
-    return { status: "fail", message: "Something Went Wrong !" };
+    return { status: "fail", message: "Something Went Wrong! payment" };
   }
 };
 
@@ -67,6 +68,33 @@ const GetAllStudentWithPagination = async (req) => {
     return {
       status: "success",
       message: "Get all student data",
+      data: data,
+      totalPages,
+      totalCount,
+      perPage,
+    };
+  } catch (e) {
+    return { status: "fail", message: "Something Went Wrong !" };
+  }
+};
+
+const StudentInvoiceService = async (req) => {
+  try {
+    let pageNo = Number(req.params.pageNo);
+    let perPage = Number(req.params.perPage);
+    let skipRow = (pageNo - 1) * perPage;
+    data = await InvoiceModel.aggregate([
+      {
+        $facet: {
+          Rows: [{ $skip: skipRow }, { $limit: perPage }],
+        },
+      },
+    ]);
+    const totalCount = await InvoiceModel.countDocuments();
+    const totalPages = Math.ceil(totalCount / perPage);
+    return {
+      status: "success",
+      message: "Get all invoice data",
       data: data,
       totalPages,
       totalCount,
@@ -171,4 +199,5 @@ module.exports = {
   GetSearchByStudentClassAndVersion,
   DeleteManyStudentService,
   UpdateManyStudentService,
+  StudentInvoiceService
 };
